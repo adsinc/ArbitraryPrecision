@@ -14,7 +14,7 @@ subtract :: String -> String -> String
 subtract = convert sub
 
 multiply :: String -> String -> String
-multiply = convert mult
+multiply = convert multiply'
 
 -- знак
 data Sign = Pos | Neg deriving (Eq, Show)
@@ -100,11 +100,27 @@ subEqLen a b = foldr fn ([], 0) (zip a b)
             in (digit : result, 1)
       | otherwise = ((x - transfer - y) : result, 0)
 
-mult :: AP -> AP -> AP
-mult = undefined
+multiply' :: AP -> AP -> AP
+multiply' (sa, a) (sb, b) =
+  let sign = if sa == sb then Pos else Neg
+  in (sign, multiplyNoSign a b)
 
-  -- module <фамилия>.TowerOfHanoi
-  -- solve :: Int ->BitArray
-  
-  -- module <фамилия>.Function
-  -- solve :: String -> [Float] ->Float
+multiplyNoSign :: [Int] -> [Int] -> [Int]
+multiplyNoSign as bs = fst $ foldr f ([0], 0) bs
+  where
+    f :: Int -> ([Int], Int) -> ([Int], Int)
+    f b (res, shift) =
+      let p = multiplySingle as b
+          shifted = p ++ replicate shift 0
+      in (addNoSign shifted res, shift + 1)
+
+multiplySingle :: [Int] -> Int -> [Int]
+multiplySingle as b = convert $ foldr fn ([], 0) as
+  where
+    fn a (result, transfer) =
+      let digitProd = a * b + transfer
+          newTransfer = digitProd `div` 10
+          digit = digitProd `mod` 10
+      in (digit : result, newTransfer)
+    convert (prod, 0) = prod
+    convert (prod, transfer) = transfer : prod
