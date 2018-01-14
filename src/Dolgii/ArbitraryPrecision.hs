@@ -27,11 +27,13 @@ convert :: (AP -> AP -> AP) -> (String -> String -> String)
 convert f x y = fromAP $ f (toAP x) (toAP y)
   where
     fromAP (sgn, xs) =
-      let s =
-            if sgn == Neg
+      let
+        num = removeZeros (map intToDigit xs)
+        s =
+            if sgn == Neg && num /= "0"
               then "-"
               else ""
-      in s ++ removeZeros (map intToDigit xs)
+      in s ++ num
       where
         removeZeros s =
           if all (== '0') s
