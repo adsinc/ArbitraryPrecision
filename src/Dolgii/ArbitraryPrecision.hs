@@ -17,7 +17,7 @@ multiply :: String -> String -> String
 multiply = convert mult
 
 -- знак
-data Sign = Pos | Neg deriving Eq
+data Sign = Pos | Neg deriving (Eq, Show)
 -- тип - пара знак + список
 type AP = (Sign, [Int])
 
@@ -84,7 +84,7 @@ subInts xs ys =
       ys' = zeros ++ ys
   in if lenDiff > 0 || lenDiff == 0 && checkGtEq xs ys'
     then (Pos, fst $ subEqLen xs ys')
-    else (Neg, fst $ subEqLen ys xs)
+    else (Neg, snd $ subInts ys xs)
   where checkGtEq (a:as) (b:bs)
           | a < b = False
           | a > b = True
