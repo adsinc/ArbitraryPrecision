@@ -89,7 +89,7 @@ subInts xs ys =
           | a < b = False
           | a > b = True
           | otherwise = checkGtEq as bs
-        checkGt [] [] = True
+        checkGtEq [] [] = True
 
 subEqLen :: [Int] -> [Int] -> ([Int], Int)
 subEqLen a b = foldr fn ([], 0) (zip a b) 
